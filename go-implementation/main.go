@@ -4,6 +4,7 @@ import (
 	"fmt"
 )
 
+
 type Neuron struct{
 	Samples [][]float64
 	Classes []float64
@@ -29,7 +30,7 @@ func calculateClass(sample []float64, weights []float64)(result int){
 func train(n *Neuron){
 	errors := 1.0
 	times := 0
-	for errors >0 && times < 10000 {
+	for errors != 0  {
 		errors = 0
 		times ++
 		for i, class := range (*n).Classes{
@@ -38,9 +39,9 @@ func train(n *Neuron){
 			errors += err
 			for j, weight := range (*n).Weights{
 				(*n).Weights[j] = weight + ((*n).TrainingRate * (*n).Samples[i][j] * err)
-				fmt.Println("peso atualizado de ", weight, " para ", (*n).Weights[j])
+				//fmt.Println("peso atualizado de ", weight, " para ", (*n).Weights[j])
 			}
-			fmt.Println("erros: ", err)
+			//fmt.Println("erros: ", err)
 		}
 	}
 }
@@ -48,11 +49,12 @@ func train(n *Neuron){
 func main (){
 	n := Neuron{
 			Samples:[][]float64{{0,0},{0,1}, {1,0},{1,1}},
-			Classes:[]float64{0,1,1,0},
+			Classes:[]float64{0,1,1,1},
 			Weights:[]float64{0,0},
 			TrainingRate: 0.1}
 	train(&n)
-	for i, s := range n.Samples{
-		fmt.Println("peso: ", i ," classe: ", calculateClass(s,n.Weights))
-	}
+	fmt.Println(calculateClass(n.Samples[0], n.Weights))
+	fmt.Println(calculateClass(n.Samples[1], n.Weights))
+	fmt.Println(calculateClass(n.Samples[2], n.Weights))
+	fmt.Println(calculateClass(n.Samples[3], n.Weights))
 }
